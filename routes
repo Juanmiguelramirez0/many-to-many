@@ -1,0 +1,9 @@
+use App\Http\Controllers\UserRoleController;
+
+Route::get('/users', [UserRoleController::class, 'index']); // List all users with roles
+
+Route::get('/user/{id}/roles', [UserRoleController::class, 'showRoles']); // Show roles of a specific user
+
+Route::post('/user/{id}/assign-roles', [UserRoleController::class, 'assignRoles']); // Assign roles to a user
+
+Route::post('/user/{id}/remove-roles', [UserRoleController::class, 'removeRoles']); // Remove roles from a user
