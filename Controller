@@ -1,0 +1,42 @@
+namespace App\Http\Controllers;
+
+use App\Models\User;
+use App\Models\Role;
+use Illuminate\Http\Request;
+
+class UserRoleController extends Controller
+{
+    // Display all users and their roles
+    public function index()
+    {
+        $users = User::with('roles')->get();
+        return view('users.index', compact('users'));
+    }
+
+    // Show all roles of a specific user
+    public function showRoles($id)
+    {
+        $user = User::with('roles')->findOrFail($id);
+        return view('users.roles', compact('user'));
+    }
+
+    // Assign roles to a user
+    public function assignRoles(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $roles = $request->input('roles'); // Array of role IDs
+        $user->roles()->attach($roles);
+
+        return redirect()->back()->with('success', 'Roles assigned successfully!');
+    }
+
+    // Remove roles from a user
+    public function removeRoles(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $roles = $request->input('roles'); // Array of role IDs
+        $user->roles()->detach($roles);
+
+        return redirect()->back()->with('success', 'Roles removed successfully!');
+    }
+}
